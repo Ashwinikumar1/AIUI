@@ -4,13 +4,14 @@ import shutil
 import time
 import uuid
 
+from google.cloud import speech
+
 import ffmpeg
-import openai
 
 from util import delete_file
 
 LANGUAGE = os.getenv("LANGUAGE", "en")
-
+os.environ['GOOGLE_APPLICATION_CREDENTIALS']= '/app/quixotic-vent-417118-ddb0ddff9df2.json'
 
 async def transcribe(audio):
     start_time = time.time()
@@ -32,13 +33,29 @@ async def transcribe(audio):
 
     delete_file(initial_filepath)
 
-    read_file = open(converted_filepath, "rb")
+    client = speech.SpeechClient()
 
-    logging.debug("calling whisper")
-    transcription = (await openai.Audio.atranscribe("whisper-1", read_file, language=LANGUAGE))["text"]
-    logging.info("STT response received from whisper in %s %s", time.time() - start_time, 'seconds')
-    logging.info('user prompt: %s', transcription)
+    with open(converted_filepath, "rb") as audio_file:
+        content = audio_file.read()
+
+    audio = speech.RecognitionAudio(content=content)
+    config = speech.RecognitionConfig(
+        language_code='en-US',
+
+    )
+
+
+    logging.debug("calling Google Cloud Speech API")
+    response = client.recognize(config=config, audio=audio)
+    logging.info("STT response received from Google Cloud Speech in %s seconds", time.time() - start_time)
+
+    # Extract transcript from the response
+    transcript = ""
+    for result in response.results:
+        transcript += result.alternatives[0].transcript + " "
+
+    logging.info('Transcript: %s', transcript)
 
     delete_file(converted_filepath)
 
-    return transcription
+    return transcript

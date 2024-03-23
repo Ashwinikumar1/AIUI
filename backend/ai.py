@@ -5,11 +5,19 @@ import os
 import time
 
 import openai
+import asyncio
+
+from groq import AsyncGroq
+import os
+os.environ["GROQ_API_KEY"] = "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"
+# Instantiation of Groq Client
+client = AsyncGroq(api_key=os.environ.get("GROQ_API_KEY"),)
 
 AI_COMPLETION_MODEL = os.getenv("AI_COMPLETION_MODEL", "gpt-3.5-turbo")
 LANGUAGE = os.getenv("LANGUAGE", "en")
-INITIAL_PROMPT = f"You are AIUI - a helpful assistant with a voice interface. Keep your responses very succinct and limited to a single sentence since the user is interacting with you through a voice interface. Always provide your responses in the language that corresponds to the ISO-639-1 code: {LANGUAGE}."
+INITIAL_PROMPT = f"You are CIARA AI - a helpful assistant with a voice interface. Keep your responses very succinct and concise. maybe 2-3 sentences at max. Dont add any slautation but answer as human will in a converstaion by adding fillers like umm, sure etc. Always provide your responses in the language that corresponds to the ISO-639-1 code: {LANGUAGE}."
 
+groq_model_name = "mixtral-8x7b-32768"
 
 async def get_completion(user_prompt, conversation_thus_far):
     if _is_empty(user_prompt):
@@ -27,10 +35,19 @@ async def get_completion(user_prompt, conversation_thus_far):
     messages.append({"role": "user", "content": user_prompt})
 
     logging.debug("calling %s", AI_COMPLETION_MODEL)
-    res = await openai.ChatCompletion.acreate(model=AI_COMPLETION_MODEL, messages=messages, timeout=15)
+    res = await client.chat.completions.create(
+        messages=messages,
+        model=groq_model_name,
+        temperature=0.5,
+        max_tokens=1024,
+        top_p=1,
+        stop=None,
+        stream=False,
+    )
+
     logging.info("response received from %s %s %s %s", AI_COMPLETION_MODEL, "in", time.time() - start_time, "seconds")
 
-    completion = res['choices'][0]['message']['content']
+    completion = res.choices[0].message.content
     logging.info('%s %s %s', AI_COMPLETION_MODEL, "response:", completion)
 
     return completion

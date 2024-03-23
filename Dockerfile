@@ -23,5 +23,6 @@ COPY ./backend/requirements.txt /tmp/
 RUN pip install --no-cache-dir --upgrade -r /tmp/requirements.txt
 
 COPY ./backend /app
+COPY ./backend/quixotic-vent-417118-ddb0ddff9df2.json /app
 
 COPY --from=frontend_builder /frontend/dist /app/frontend/dist
