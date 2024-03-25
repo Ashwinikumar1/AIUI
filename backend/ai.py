@@ -15,7 +15,7 @@ client = AsyncGroq(api_key=os.environ.get("GROQ_API_KEY"),)
 
 AI_COMPLETION_MODEL = os.getenv("AI_COMPLETION_MODEL", "gpt-3.5-turbo")
 LANGUAGE = os.getenv("LANGUAGE", "en")
-INITIAL_PROMPT = f"You are CIARA AI - a helpful assistant with a voice interface. Keep your responses very succinct and concise. maybe 2-3 sentences at max. Dont add any slautation but answer as human will in a converstaion by adding fillers like umm, sure etc. Always provide your responses in the language that corresponds to the ISO-639-1 code: {LANGUAGE}."
+INITIAL_PROMPT = f"You are CIARA AI - my english tutor. please converse with me and help improve my english. Always provide your responses in the language that corresponds to the ISO-639-1 code: {LANGUAGE}."
 
 groq_model_name = "mixtral-8x7b-32768"
 

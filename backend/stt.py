@@ -10,7 +10,7 @@ import ffmpeg
 
 from util import delete_file
 
-LANGUAGE = os.getenv("LANGUAGE", "en")
+LANGUAGE = os.getenv("LANGUAGE", "hi")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS']= '/app/quixotic-vent-417118-ddb0ddff9df2.json'
 
 async def transcribe(audio):
