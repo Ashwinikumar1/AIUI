@@ -23,6 +23,9 @@ ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "2d3e8e9b04b04645a214b548d8
 ELEVENLABS_VOICE = os.getenv("ELEVENLABS_VOICE", "Sarah")
 EDGETTS_VOICE = os.getenv("EDGETTS_VOICE", "en-US-EricNeural")
 
+from deep_translator import GoogleTranslator  
+translator = GoogleTranslator(source='english',target='hindi')  
+
 
 async def to_speech(text, background_tasks):
     if TTS_PROVIDER == "gTTS":
@@ -91,14 +94,19 @@ async def _google_text_to_speech(text, background_tasks):
     # Instantiates a client
     client = texttospeech.TextToSpeechClient()
 
+    translated_text = translator.translate(text) 
+
+    print ("Actual Text is :", text)
+    print ("Translated text is :", translated_text)
+
     # Set the text input to be synthesized
-    synthesis_input = texttospeech.SynthesisInput(text=text)
+    synthesis_input = texttospeech.SynthesisInput(text=translated_text)
 
     # Build the voice request, select the language code ("en-US")
     # and the ssml voice gender ("neutral")
     voice = texttospeech.VoiceSelectionParams(
-        language_code='en-IN',
-        name='en-IN-Neural2-B',
+        language_code='hi-IN',
+        name='hi-IN-Neural2-C',
         ssml_gender=texttospeech.SsmlVoiceGender.MALE)
 
     # Select the type of audio file you want returned

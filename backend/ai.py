@@ -15,7 +15,7 @@ client = AsyncGroq(api_key=os.environ.get("GROQ_API_KEY"),)
 
 AI_COMPLETION_MODEL = os.getenv("AI_COMPLETION_MODEL", "gpt-3.5-turbo")
 LANGUAGE = os.getenv("LANGUAGE", "en")
-INITIAL_PROMPT = f"You are CIARA AI - my english tutor. please converse with me and help improve my english. Always provide your responses in the language that corresponds to the ISO-639-1 code: {LANGUAGE}."
+INITIAL_PROMPT = f"You are CIARA AI - a helpful assistant. Please provide answers to my queries in concise form max 2-3 sentences. Always provide your responses in the language that corresponds to the ISO-639-1 code: {LANGUAGE}."
 
 groq_model_name = "mixtral-8x7b-32768"
 
@@ -31,7 +31,7 @@ async def get_completion(user_prompt, conversation_thus_far):
         }
     ]
 
-    messages.extend(json.loads(base64.b64decode(conversation_thus_far)))
+    # messages.extend(json.loads(base64.b64decode(conversation_thus_far)))
     messages.append({"role": "user", "content": user_prompt})
 
     logging.debug("calling %s", AI_COMPLETION_MODEL)

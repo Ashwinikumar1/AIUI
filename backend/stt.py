@@ -10,7 +10,12 @@ import ffmpeg
 
 from util import delete_file
 
-LANGUAGE = os.getenv("LANGUAGE", "hi")
+from deep_translator import GoogleTranslator  
+translator = GoogleTranslator(source='hindi',target='english')   
+#translate_text = translator.translate('सुप्रभात कैसे हो तुम आज')
+
+
+LANGUAGE = os.getenv("LANGUAGE", "hi-IN")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS']= '/app/quixotic-vent-417118-ddb0ddff9df2.json'
 
 async def transcribe(audio):
@@ -40,8 +45,7 @@ async def transcribe(audio):
 
     audio = speech.RecognitionAudio(content=content)
     config = speech.RecognitionConfig(
-        language_code='en-US',
-
+        language_code=LANGUAGE,
     )
 
 
@@ -52,7 +56,7 @@ async def transcribe(audio):
     # Extract transcript from the response
     transcript = ""
     for result in response.results:
-        transcript += result.alternatives[0].transcript + " "
+        transcript += translator.translate(result.alternatives[0].transcript) + " "
 
     logging.info('Transcript: %s', transcript)
 
