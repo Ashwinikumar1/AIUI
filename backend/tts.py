@@ -14,7 +14,7 @@ from pyht import Client as pclient, TTSOptions, Format
 pclient = pclient("1WWdnyi24egvl9e2uP1UdCqJ9sf2", "d3588261f5d7428c8dff4b54749be1a7")
 from util import delete_file
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS']= '/app/quixotic-vent-417118-ddb0ddff9df2.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS']= ''
 
 LANGUAGE = os.getenv("LANGUAGE", "en")
 TTS_PROVIDER = os.getenv("TTS_PROVIDER", "EDGETTS")
